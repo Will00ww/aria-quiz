@@ -9,7 +9,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Oswald:wght@600;700&display=swap" rel="stylesheet">
-
+  <link rel="preload" as="image" href="himera.webp">
+  <link rel="preload" as="image" href="tomorrow.webp">
+  
   <style>
     /* Нейтральная база */
     :root {
@@ -452,7 +454,7 @@
       document.getElementById('result-desc').innerHTML = "<b>Ваш подход — Фатализм и индивидуализм.</b><br><br>В сложных ситуациях Вы склонны к обособленности и защите собственных границ. Вы реалистично оцениваете бессмысленность борьбы с внешними факторами и предпочитаете сохранять личную автономию, а не тратить силы на безнадежное сопротивление.";
       
       if (imgHimera) {
-        resImg.src = "https://i.postimg.cc/QMvV144J/i.webp";
+        resImg.src = "himera.webp";
         resImg.style.display = 'block';
       }
     } else {
@@ -462,7 +464,7 @@
       document.getElementById('result-desc').innerHTML = "<b>Ваш подход — Волевой акт и ответственность.</b><br><br>Вам близок концепт духовного подвига и прямого действия (принцип «Гордиева узла»). Вы не опускаете руки перед лицом проблем, готовы брать на себя ответственность за результат и верите в созидательную силу преодоления.";
       
       if (imgTomorrow) {
-        resImg.src = "https://i.postimg.cc/TwZm2YMt/i-(4).webp";
+        resImg.src = "tomorrow.webp";
         resImg.style.display = 'block';
       }
     }
