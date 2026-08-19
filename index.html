@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тест: Эволюция Бунта</title>
+  
+  <!-- Атмосферные рокерские шрифты -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Oswald:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* Нейтральная база */
+    :root {
+      --bg: #0d0d11;
+      --card-bg: rgba(22, 22, 30, 0.92);
+      --accent: #e63946;
+      --accent-glow: rgba(230, 57, 70, 0.35);
+      --text: #edf2f4;
+      --subtext: #8d99ae;
+      --border-color: rgba(230, 57, 70, 0.25);
+      --vinyl-label: #e63946;
+    }
+
+    /* Тема «ХИМЕРА» (Ядовито-зеленый фатализм) */
+    body.theme-himera {
+      --bg: #050d0a;
+      --card-bg: rgba(14, 26, 21, 0.92);
+      --accent: #2ec4b6;
+      --accent-glow: rgba(46, 196, 182, 0.4);
+      --text: #e0f2fe;
+      --subtext: #70978f;
+      --border-color: rgba(46, 196, 182, 0.3);
+      --vinyl-label: #2ec4b6;
+    }
+
+    /* Тема «ЗАВТРА» (Золотистый волевой рассвет) */
+    body.theme-tomorrow {
+      --bg: #141008;
+      --card-bg: rgba(33, 27, 16, 0.92);
+      --accent: #ffb703;
+      --accent-glow: rgba(255, 183, 3, 0.4);
+      --text: #fff8e7;
+      --subtext: #caba94;
+      --border-color: rgba(255, 183, 3, 0.35);
+      --vinyl-label: #ffb703;
+    }
+
+    /* ФОНОВЫЕ ЭФФЕКТЫ (ПЛАСТИНОЧКИ И ГИТАРЫ) */
+    .bg-decor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    /* Винил CSS */
+    .vinyl {
+      position: absolute;
+      border-radius: 50%;
+      background: repeating-radial-gradient(
+        circle,
+        #111 0px,
+        #111 3px,
+        #222 4px,
+        #111 5px
+      );
+      box-shadow: 0 0 25px rgba(0,0,0,0.8);
+      opacity: 0.22;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: spinVinyl 20s linear infinite;
+    }
+
+    /* Центральное яблоко пластинки */
+    .vinyl::after {
+      content: '';
+      width: 30%;
+      height: 30%;
+      background: var(--vinyl-label);
+      border-radius: 50%;
+      border: 4px solid #111;
+      box-shadow: inset 0 0 5px rgba(0,0,0,0.6);
+      transition: background 0.8s ease;
+    }
+
+    .vinyl-1 {
+      width: 320px;
+      height: 320px;
+      top: -60px;
+      left: -80px;
+    }
+
+    .vinyl-2 {
+      width: 220px;
+      height: 220px;
+      bottom: -40px;
+      right: -50px;
+      animation-direction: reverse;
+      animation-duration: 14s;
+    }
+
+    @keyframes spinVinyl {
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Плавающие гитары / рок-символы */
+    .floating-icon {
+      position: absolute;
+      font-size: 2.2rem;
+      opacity: 0.15;
+      user-select: none;
+      filter: drop-shadow(0 0 8px var(--accent-glow));
+      animation: floatAnim 6s ease-in-out infinite alternate;
+    }
+
+    .icon-1 { top: 15%; right: 10%; animation-duration: 5s; transform: rotate(-15deg); }
+    .icon-2 { bottom: 20%; left: 8%; animation-duration: 7s; animation-delay: -2s; transform: rotate(20deg); }
+    .icon-3 { top: 50%; left: 3%; animation-duration: 6s; animation-delay: -4s; font-size: 1.8rem; }
+    .icon-4 { bottom: 8%; right: 25%; animation-duration: 8s; animation-delay: -1s; font-size: 1.6rem; }
+
+    @keyframes floatAnim {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(-25px) rotate(12deg); }
+    }
+
+    /* Пульсирующее свечение карточки */
+    @keyframes breathe {
+      0% { box-shadow: 0 0 35px var(--accent-glow); }
+      50% { box-shadow: 0 0 65px var(--accent-glow); }
+      100% { box-shadow: 0 0 35px var(--accent-glow); }
+    }
+
+    /* Световая волна по всей карточке */
+    .container {
+      position: relative;
+      overflow: hidden;
+      background: var(--card-bg);
+      backdrop-filter: blur(8px); /* Легкий размытый фон карточки */
+      width: 100%; 
+      max-width: 550px;
+      border-radius: 18px; 
+      padding: 30px;
+      animation: breathe 5s infinite ease-in-out;
+      border: 1px solid var(--border-color);
+      box-sizing: border-box;
+      transition: background 0.8s ease, border-color 0.8s ease;
+    }
+
+    .container.wave-active::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -150%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        60deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.22) 50%,
+        transparent 70%
+      );
+      transform: rotate(25deg);
+      animation: waveSheen 0.85s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    @keyframes waveSheen {
+      0% { left: -150%; }
+      100% { left: 150%; }
+    }
+
+    /* Анимации каскадного вылета элементов */
+    @keyframes popUp {
+      0% { 
+        opacity: 0; 
+        transform: translateY(22px) scale(0.96); 
+        filter: blur(5px); 
+      }
+      100% { 
+        opacity: 1; 
+        transform: translateY(0) scale(1); 
+        filter: blur(0); 
+      }
+    }
+
+    .stagger-1 { animation: popUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards; opacity: 0; }
+    .stagger-2 { animation: popUp 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards; opacity: 0; }
+    .stagger-3 { animation: popUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards; opacity: 0; }
+    .stagger-4 { animation: popUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.55s forwards; opacity: 0; }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0; 
+      padding: 20px;
+      transition: background 0.8s ease, color 0.8s ease;
+    }
+
+    h1 { 
+      font-family: 'Oswald', sans-serif;
+      color: var(--accent); 
+      text-align: center; 
+      text-transform: uppercase; 
+      font-size: 1.7rem; 
+      letter-spacing: 1.5px; 
+      margin-top: 0;
+      transition: color 0.8s ease;
+    }
+
+    .subtitle { 
+      text-align: center; 
+      color: var(--subtext); 
+      font-size: 0.9rem; 
+      margin-bottom: 20px; 
+      line-height: 1.4; 
+    }
+
+    .intro-box {
+      background: rgba(0,0,0,0.3);
+      border-left: 4px solid var(--accent);
+      padding: 18px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 25px;
+      transition: border-color 0.8s ease;
+    }
+
+    .question { 
+      font-size: 1.1rem; 
+      font-weight: 600; 
+      margin-bottom: 25px; 
+      line-height: 1.4;
+    }
+
+    .options { display: flex; flex-direction: column; gap: 14px; }
+
+    .btn-option {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text); 
+      padding: 16px; 
+      border-radius: 12px;
+      text-align: left; 
+      cursor: pointer; 
+      transition: all 0.3s ease; 
+      font-size: 0.95rem; 
+      line-height: 1.4;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .btn-option:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--accent);
+      box-shadow: 0 0 18px var(--accent-glow);
+      transform: translateY(-2px);
+    }
+
+    #quiz-screen, .result { display: none; }
+    .result { text-align: center; }
+
+    .result-title { 
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.4rem; 
+      color: var(--accent); 
+      margin-bottom: 15px; 
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Оформление обложки / арта в результатах */
+    .result-img {
+      width: 100%;
+      max-height: 230px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin: 15px 0 20px 0;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.7), 0 0 25px var(--accent-glow);
+      box-sizing: border-box;
+    }
+
+    .result-desc-box {
+      text-align: left; 
+      margin-bottom: 25px; 
+      line-height: 1.6; 
+      background: rgba(0,0,0,0.25); 
+      padding: 20px; 
+      border-radius: 10px; 
+      border: 1px solid var(--border-color);
+      font-size: 0.95rem;
+    }
+
+    .primary-btn {
+      display: block;
+      width: 100%;
+      background: var(--accent); 
+      color: #000; 
+      border: none;
+      padding: 15px 24px; 
+      border-radius: 10px; 
+      cursor: pointer; 
+      transition: all 0.3s ease; 
+      font-weight: 700;
+      font-size: 1rem; 
+      text-transform: uppercase; 
+      letter-spacing: 1px;
+      font-family: 'Oswald', sans-serif;
+    }
+
+    .primary-btn:hover { 
+      filter: brightness(1.2);
+      box-shadow: 0 0 25px var(--accent-glow); 
+      transform: scale(1.01);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ДЕКОРАТИВНЫЙ ФОН С ВИННОМ И ГИТАРАМИ -->
+<div class="bg-decor">
+  <div class="vinyl vinyl-1"></div>
+  <div class="vinyl vinyl-2"></div>
+  <div class="floating-icon icon-1">🎸</div>
+  <div class="floating-icon icon-2">⚡</div>
+  <div class="floating-icon icon-3">🎶</div>
+  <div class="floating-icon icon-4">🎸</div>
+</div>
+
+<div class="container">
+  
+  <!-- ПРИВЕТСТВЕННЫЙ ЭКРАН -->
+  <div id="start-screen" class="stagger-1">
+    <h1>Эволюция Бунта</h1>
+    <p class="subtitle">Интерактивное исследование к проекту по лирике группы «Ария»</p>
+    
+    <div class="intro-box">
+      <b>Уважаемые члены комиссии!</b><br><br>
+      Вам предлагается пройти короткий ситуационный экспресс-тест (4 вопроса). <br><br>
+      Он поможет определить, какому этапу смысловой эволюции группы соответствует Ваш стиль принятия решений: фаталистично-эгоистической эпохе альбома <b>«Химера» (2001)</b> или созидательно-волевой эпохе <b>«Когда настанет завтра» (2025)</b>.
+    </div>
+
+    <button class="primary-btn" onclick="startQuiz()">Пройти тест</button>
+  </div>
+
+  <!-- ЭКРАН ВОПРОСОВ -->
+  <div id="quiz-screen">
+    <h1>Какой Вы бунтарь?</h1>
+    <div class="question" id="question-text">Загрузка...</div>
+    <div class="options" id="options-container"></div>
+  </div>
+
+  <!-- ЭКРАН РЕЗУЛЬТАТА -->
+  <div id="result-screen" class="result">
+    <h1 class="stagger-1">Ваш результат</h1>
+    <div class="result-title stagger-2" id="result-title">...</div>
+    
+    <img id="result-image" class="result-img stagger-3" src="" alt="Результат" style="display: none;">
+    
+    <div id="result-desc" class="result-desc-box stagger-3">...</div>
+    <button class="primary-btn stagger-4" onclick="restartQuiz()">Пройти заново</button>
+  </div>
+
+</div>
+
+<script>
+  // Ссылки на картинки
+  const imgHimera = "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=600&auto=format&fit=crop"; 
+  const imgTomorrow = "https://i.postimg.cc/TwZm2YMt/i-(4).webp"; 
+
+  const questions = [
+    { q: "Вы долго работали над важным проектом, но из-за внешних факторов вся работа аннулирована. Ваша реакция?", a: [
+      { text: "Отложу всё в сторону. Бессмысленно бодаться с обстоятельствами, личные ресурсы дороже.", type: "himera" },
+      { text: "Пересоберу всё заново с нуля. Главное — довести дело до конца и показать результат.", type: "tomorrow" }
+    ]},
+    { q: "Коллега подвел команду и не выполнил критическую часть задачи перед дедлайном. Как поступите?", a: [
+      { text: "Предоставлю только свою часть работы. Каждый должен сам отвечать за свои провалы.", type: "himera" },
+      { text: "Возьму контроль на себя и перекрою задачу сам(а), чтобы спасти общий проект.", type: "tomorrow" }
+    ]},
+    { q: "Вы столкнулись с очевидной несправедливостью или бюрократическим абсурдом в системе. Что сделаете?", a: [
+      { text: "Дистанцируюсь и буду спокойно делать свое дело. Система всё равно сильнее.", type: "himera" },
+      { text: "Выскажу позицию открыто. Если молчать — ничего не изменится, даже если есть риск.", type: "tomorrow" }
+    ]},
+    { q: "Когда вокруг рушатся привычные плановые ориентиры и наступает неопределенность, какова Ваша стратегия?", a: [
+      { text: "Займу наблюдательную позицию в энергосберегающем режиме. Чему быть, того не избежать.", type: "himera" },
+      { text: "Действую решительно и ищу новые точки опоры. Из любого кризиса можно выйти обновленным.", type: "tomorrow" }
+    ]}
+  ];
+  
+  let currentQ = 0; 
+  let scores = { himera: 0, tomorrow: 0 };
+
+  function startQuiz() {
+    document.getElementById('start-screen').style.display = 'none';
+    document.getElementById('quiz-screen').style.display = 'block';
+    showQuestion();
+  }
+  
+  function showQuestion() {
+    const q = questions[currentQ];
+    document.getElementById('question-text').innerText = `${currentQ + 1}/4. ${q.q}`;
+    const opts = document.getElementById('options-container');
+    opts.innerHTML = '';
+    
+    const screen = document.getElementById('quiz-screen');
+    screen.className = 'stagger-1';
+    void screen.offsetWidth; 
+
+    q.a.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'btn-option'; 
+      btn.innerText = opt.text;
+      btn.onclick = () => { 
+        scores[opt.type]++; 
+        currentQ++; 
+        currentQ < questions.length ? showQuestion() : showResult(); 
+      };
+      opts.appendChild(btn);
+    });
+  }
+
+  function showResult() {
+    document.getElementById('quiz-screen').style.display = 'none';
+    const resScreen = document.getElementById('result-screen');
+    const resImg = document.getElementById('result-image');
+    const container = document.querySelector('.container');
+    
+    // Пускаем световую волну блика
+    container.classList.remove('wave-active');
+    void container.offsetWidth; 
+    container.classList.add('wave-active');
+
+    resScreen.style.display = 'block';
+    
+    if (scores.himera >= scores.tomorrow) {
+      document.body.className = 'theme-himera';
+      
+      document.getElementById('result-title').innerText = "Ваш психотип — Эпоха «Химеры» (2001)";
+      document.getElementById('result-desc').innerHTML = "<b>Ваш подход — Фатализм и индивидуализм.</b><br><br>В сложных ситуациях Вы склонны к обособленности и защите собственных границ. Вы реалистично оцениваете бессмысленность борьбы с внешними факторами и предпочитаете сохранять личную автономию, а не тратить силы на безнадежное сопротивление.";
+      
+      if (imgHimera) {
+        resImg.src = "https://i.postimg.cc/QMvV144J/i.webp";
+        resImg.style.display = 'block';
+      }
+    } else {
+      document.body.className = 'theme-tomorrow';
+      
+      document.getElementById('result-title').innerText = "Ваш психотип — Эпоха «Когда настанет завтра» (2025)";
+      document.getElementById('result-desc').innerHTML = "<b>Ваш подход — Волевой акт и ответственность.</b><br><br>Вам близок концепт духовного подвига и прямого действия (принцип «Гордиева узла»). Вы не опускаете руки перед лицом проблем, готовы брать на себя ответственность за результат и верите в созидательную силу преодоления.";
+      
+      if (imgTomorrow) {
+        resImg.src = "https://i.postimg.cc/TwZm2YMt/i-(4).webp";
+        resImg.style.display = 'block';
+      }
+    }
+  }
+
+  function restartQuiz() { 
+    currentQ = 0; 
+    scores = { himera: 0, tomorrow: 0 }; 
+    document.body.className = ''; 
+    document.getElementById('result-screen').style.display = 'none'; 
+    document.getElementById('start-screen').style.display = 'block'; 
+  }
+</script>
+</body>
+</html>
