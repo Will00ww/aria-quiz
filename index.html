@@ -1,5 +1,3 @@
-
-```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -110,7 +108,57 @@
       box-shadow: 0 0 25px var(--accent-glow), inset 0 0 15px rgba(0,0,0,0.8);
       padding: 35px 30px;
       border-radius: 4px;
+      overflow: hidden; /* Чтобы анимации выкатывания не разрывали контейнер */
       transition: border-color 0.5s ease, box-shadow 0.5s ease;
+    }
+
+    /* Титульный экран */
+    .start-screen {
+      text-align: center;
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    .main-title {
+      font-family: var(--font-header);
+      font-size: 2.6rem;
+      color: var(--accent-color);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 15px;
+      text-shadow: 0 0 15px var(--accent-glow);
+      transition: color 0.5s ease;
+    }
+
+    .start-desc {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: #cccccc;
+      margin-bottom: 30px;
+    }
+
+    .start-btn {
+      background: var(--accent-color);
+      color: #000;
+      font-family: var(--font-header);
+      font-size: 1.3rem;
+      text-transform: uppercase;
+      padding: 15px 40px;
+      border: none;
+      cursor: pointer;
+      letter-spacing: 1.5px;
+      transition: all 0.2s ease;
+      box-shadow: 0 0 15px var(--accent-glow);
+    }
+
+    .start-btn:hover {
+      transform: scale(1.05);
+      background: #ffffff;
+      box-shadow: 0 0 25px #ffffff;
+    }
+
+    /* Экран вопросов */
+    .question-screen {
+      display: none;
     }
 
     /* Шкала прогресса */
@@ -213,12 +261,12 @@
     .result-screen {
       display: none;
       text-align: center;
-      animation: fadeIn 0.6s ease forwards;
+      animation: fadeIn 0.4s ease forwards;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     .result-title {
@@ -227,27 +275,78 @@
       color: var(--accent-color);
       text-transform: uppercase;
       letter-spacing: 2px;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
       text-shadow: 0 0 10px var(--accent-glow);
       transition: color 0.5s ease;
+    }
+
+    /* Двухколоночный блок результата для ПК */
+    .result-body {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 25px;
+      margin-bottom: 30px;
+    }
+
+    .result-img-box {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .result-img {
       max-width: 100%;
       height: auto;
-      max-height: 280px;
+      max-height: 260px;
       border: 2px solid var(--accent-color);
       box-shadow: 0 0 15px var(--accent-glow);
-      margin-bottom: 20px;
       object-fit: cover;
       transition: border-color 0.5s ease;
+      border-radius: 4px;
+    }
+
+    .result-text-box {
+      flex: 1.2;
+      text-align: left;
     }
 
     .result-desc {
-      font-size: 1.05rem;
+      font-size: 1rem;
       line-height: 1.6;
       color: #dddddd;
-      margin-bottom: 30px;
+    }
+
+    /* --- АНИМАЦИИ ВЫКАТЫВАНИЯ (ПК: Лево/Право) --- */
+    .animate-result .result-img-box {
+      animation: rollInLeft 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .animate-result .result-text-box {
+      animation: slideInRight 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes rollInLeft {
+      0% {
+        transform: translateX(-150%) rotate(-120deg);
+        opacity: 0;
+      }
+      100% {
+        transform: translateX(0) rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideInRight {
+      0% {
+        transform: translateX(150%);
+        opacity: 0;
+      }
+      100% {
+        transform: translateX(0);
+        opacity: 1;
+      }
     }
 
     /* Блок с Жориком */
@@ -309,12 +408,58 @@
       box-shadow: 0 0 25px #ffffff;
     }
 
+    /* --- АДАПТИВ ДЛЯ МОБИЛОК (Верх/Низ) --- */
     @media (max-width: 600px) {
       .quiz-container { padding: 20px 15px; }
       .guitar-side { display: none; }
-      .zhorik-block { flex-direction: column; text-align: center; }
-      .zhorik-img { width: 80px; height: 80px; }
+      .main-title { font-size: 2rem; }
       .result-title { font-size: 1.7rem; }
+
+      .result-body {
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .result-text-box {
+        text-align: center;
+      }
+
+      /* Переопределяем анимацию выкатывания под вертикaльный экран */
+      .animate-result .result-img-box {
+        animation: rollInTop 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      .animate-result .result-text-box {
+        animation: slideInBottom 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      .zhorik-block { 
+        flex-direction: column; 
+        text-align: center; 
+      }
+      .zhorik-img { width: 80px; height: 80px; }
+    }
+
+    @keyframes rollInTop {
+      0% {
+        transform: translateY(-150%) rotate(-120deg);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideInBottom {
+      0% {
+        transform: translateY(150%);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+      }
     }
   </style>
 </head>
@@ -337,8 +482,15 @@
   <!-- Главная карточка -->
   <div class="quiz-container" id="quiz-box">
     
+    <!-- Титульный экран -->
+    <div class="start-screen" id="start-screen">
+      <h1 class="main-title">Эволюция бунта!</h1>
+      <p class="start-desc">ОТветье на 5 простых, но знакомых вопросов, чтобы узнать, какой вы бунтарь! А сам жорик в конце выскажет вам свое мнение...</p>
+      <button class="start-btn" onclick="startQuiz()">ТАК КАКОЙ Я БУНТАРЬ?</button>
+    </div>
+
     <!-- Интерактивная зона вопросов -->
-    <div id="question-screen">
+    <div class="question-screen" id="question-screen">
       <div class="progress-section">
         <div class="progress-header">
           <span>Рок-Тест</span>
@@ -361,8 +513,15 @@
     <!-- Финальный экран -->
     <div class="result-screen" id="result-screen">
       <h2 class="result-title" id="result-title">Результат</h2>
-      <img src="" alt="Результат" class="result-img" id="result-img">
-      <p class="result-desc" id="result-desc"></p>
+
+      <div class="result-body" id="result-body">
+        <div class="result-img-box">
+          <img src="" alt="Результат" class="result-img" id="result-img">
+        </div>
+        <div class="result-text-box">
+          <p class="result-desc" id="result-desc"></p>
+        </div>
+      </div>
 
       <!-- Обязательный блок с Жориком -->
       <div class="zhorik-block">
@@ -379,7 +538,6 @@
   </div>
 
   <script>
-    // Массив вопросов строго по ТЗ
     const questions = [
       {
         question: "Вам нужно принять решение в ситуации, где правила игры постоянно меняются сверху:",
@@ -422,17 +580,25 @@
     let scores = { himera: 0, tomorrow: 0 };
 
     const quizBox = document.getElementById('quiz-box');
+    const startScreen = document.getElementById('start-screen');
+    const questionScreen = document.getElementById('question-screen');
     const questionText = document.getElementById('question-text');
     const optionsBox = document.getElementById('options-box');
     const progressText = document.getElementById('progress-text');
     const progressFill = document.getElementById('progress-fill');
 
-    const questionScreen = document.getElementById('question-screen');
     const resultScreen = document.getElementById('result-screen');
+    const resultBody = document.getElementById('result-body');
     const resultTitle = document.getElementById('result-title');
     const resultImg = document.getElementById('result-img');
     const resultDesc = document.getElementById('result-desc');
     const zhorikQuote = document.getElementById('zhorik-quote');
+
+    function startQuiz() {
+      startScreen.style.display = 'none';
+      questionScreen.style.display = 'block';
+      loadQuestion();
+    }
 
     function loadQuestion() {
       const q = questions[currentQuestion];
@@ -454,7 +620,7 @@
     function selectOption(type) {
       scores[type]++;
       
-      // Агрессивный глитч-эффект при переходе
+      // Глитч-эффект при смене вопросов
       quizBox.classList.add('glitch-effect');
       setTimeout(() => {
         quizBox.classList.remove('glitch-effect');
@@ -492,26 +658,25 @@
         resultDesc.innerText = 'Твой путь — идти напролом, ломать стены и брать ответственность на себя. Ты не ждёшь милости от обстоятельств, а сам выжигаешь дорогу к цели. Горячее сердце и несгибаемая воля — твой главный мотор.';
         zhorikQuote.innerText = '«Опять лезешь на амбразуру с гитарой наперевес? Уважаю огненный напор, но смотри не сгори до зари!»';
       }
+
+      // Запускаем анимацию выкатывания
+      resultBody.classList.remove('animate-result');
+      void resultBody.offsetWidth; // Триггер перезапуска анимации
+      resultBody.classList.add('animate-result');
     }
 
     function restartQuiz() {
       scores = { himera: 0, tomorrow: 0 };
       currentQuestion = 0;
 
-      // Сброс цвета темы обратно на Красный
+      // Сброс класса анимации и цвета темы
+      resultBody.classList.remove('animate-result');
       document.documentElement.style.setProperty('--accent-color', '#ff0000');
       document.documentElement.style.setProperty('--accent-glow', 'rgba(255, 0, 0, 0.5)');
 
       resultScreen.style.display = 'none';
-      questionScreen.style.display = 'block';
-
-      loadQuestion();
+      startScreen.style.display = 'block';
     }
-
-    // Запуск первого вопроса
-    loadQuestion();
   </script>
 </body>
 </html>
-
-```
