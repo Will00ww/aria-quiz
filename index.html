@@ -294,11 +294,15 @@
     }
 
     .result-img {
-      width: 100%; max-height: 230px; object-fit: cover;
-      border-radius: 12px; margin: 15px 0 20px 0;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.7), 0 0 25px var(--accent-glow);
-      box-sizing: border-box;
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: none;
+      object-fit: contain;
+      border: 2px solid var(--accent-color);
+      box-shadow: 0 0 15px var(--accent-glow);
+      transition: border-color 0.5s ease;
+      border-radius: 4px;
     }
 
     .result-desc-box {
