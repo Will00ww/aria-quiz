@@ -175,35 +175,41 @@
 
     #zhorik-mascot {
       position: fixed;
+      right: clamp(18px, 5vw, 80px);
       bottom: -300px;
-      right: 10px;
-      width: 220px;
+      width: clamp(150px, 22vw, 220px);
       z-index: 999;
       pointer-events: none;
-      transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: bottom 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                  transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       filter: drop-shadow(-10px 10px 15px rgba(0,0,0,0.8));
       transform: scaleX(-1);
     }
 
     #zhorik-mascot.visible {
-      bottom: 10px;
+      bottom: max(12px, env(safe-area-inset-bottom));
       transform: scaleX(-1) rotate(5deg);
     }
 
     .zhorik-bubble {
       position: absolute;
-      top: -35px; left: -140px;
+      top: -72px;
+      left: 50%;
+      width: min(280px, calc(100vw - 36px));
       background: var(--accent);
       color: #000;
       font-weight: 700;
       font-size: 0.85rem;
+      line-height: 1.3;
       padding: 10px 14px;
       border-radius: 14px;
-      white-space: nowrap;
+      text-align: center;
+      white-space: normal;
+      overflow-wrap: anywhere;
       box-shadow: 0 5px 15px rgba(0,0,0,0.5);
       opacity: 0;
       transition: opacity 0.4s ease 0.3s;
-      transform: scaleX(-1);
+      transform: translateX(-50%) scaleX(-1);
     }
 
     #zhorik-mascot.visible .zhorik-bubble { opacity: 1; }
@@ -317,6 +323,35 @@
       box-shadow: 0 0 25px var(--accent-glow); 
       transform: scale(1.01);
     }
+
+    @media (max-width: 600px) {
+      body { align-items: flex-start; padding: 12px; }
+      .container { margin: 10px 0; padding: 22px 16px; border-radius: 14px; }
+      .floating-icon { display: none; }
+      h1 { font-size: 1.5rem; }
+      .question { font-size: 1rem; }
+      .btn-option { padding: 14px; }
+
+      #zhorik-mascot {
+        right: auto;
+        left: 50%;
+        bottom: -240px;
+        width: min(155px, 42vw);
+        transform: translateX(-50%) scaleX(-1);
+      }
+
+      #zhorik-mascot.visible {
+        bottom: max(8px, env(safe-area-inset-bottom));
+        transform: translateX(-50%) scaleX(-1) rotate(4deg);
+      }
+
+      .zhorik-bubble {
+        top: -78px;
+        width: min(270px, calc(100vw - 24px));
+        padding: 9px 12px;
+        font-size: 0.78rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -332,7 +367,7 @@
 
 <div id="zhorik-mascot">
   <div class="zhorik-bubble" id="zhorik-phrase">...</div>
-  <img src="zhorik.png" alt="Жорик" style="width: 100%;">
+  <img src="zhorik.png" alt="Жорик" style="width: 100%; display: block;">
 </div>
 
 <div class="container" id="main-container">
@@ -344,7 +379,7 @@
     <div class="intro-box">
       <b>Уважаемые члены комиссии!</b><br><br>
       Вам предлагается пройти короткий ситуационный экспресс-тест (5 вопросов). <br><br>
-      Он поможет определить, какому этапу смысловой эволюции группы соответствует Ваш стиль принятия решений: фаталистично-эгоистической эпохе альбома <b>«Химера» (2001)</b> или созидательно-волевой эпохе <b>«Когда настанет завтра» (2025)</b>.
+      Он поможет определить, какому этапу смысловой эволюции группы соответствует Ваш стиль принятия решений: «Химера» (2001) или «Когда настанет завтра» (2025).
     </div>
 
     <button class="primary-btn" onclick="startQuiz()">Пройти тест</button>
@@ -424,9 +459,8 @@
 
   function showQuestion() {
     const q = questions[currentQ];
+    const progressPercent = ((currentQ + 1) / questions.length) * 100;
     document.getElementById('question-text').innerText = `${currentQ + 1}/5. ${q.q}`;
-    
-    const progressPercent = ((currentQ) / questions.length) * 100;
     document.getElementById('progress-fill').style.width = `${progressPercent}%`;
 
     const opts = document.getElementById('options-container');
@@ -434,20 +468,25 @@
 
     const container = document.getElementById('main-container');
     container.className = 'container';
-    void container.offsetWidth; 
+    void container.offsetWidth;
     container.className = 'container stagger-1';
+
+    let answerLocked = false;
 
     q.a.forEach(opt => {
       const btn = document.createElement('button');
-      btn.className = 'btn-option'; 
+      btn.className = 'btn-option';
       btn.innerText = opt.text;
-      
-      btn.onclick = () => { 
+
+      btn.onclick = () => {
+        if (answerLocked) return;
+        answerLocked = true;
+
         btn.classList.add('selected');
-        scores[opt.type]++; 
-        
+        scores[opt.type]++;
+
         setTimeout(() => {
-          currentQ++; 
+          currentQ++;
           if (currentQ < questions.length) {
             showQuestion();
           } else {
@@ -455,6 +494,7 @@
           }
         }, 300);
       };
+
       opts.appendChild(btn);
     });
   }
@@ -470,7 +510,7 @@
     document.getElementById('progress-fill').style.width = '100%';
 
     container.classList.remove('wave-active');
-    void container.offsetWidth; 
+    void container.offsetWidth;
     container.classList.add('wave-active');
 
     resScreen.style.display = 'block';
@@ -489,7 +529,7 @@
       document.body.className = 'theme-tomorrow';
 
       document.getElementById('result-title').innerText = "Ваш психотип — Эпоха «Когда настанет завтра» (2025)";
-      document.getElementById('result-desc').innerHTML = "<b>Ваш подход — Волевой акт и ответственность.</b><br><br>Вам близок концепт духовного подвига и прямого действия (принцип «Гордиева узла»). Вы не опускаете руки перед лицом проблем, готовы брать на себя ответственность за результат и верите в созидательную силу преодоления.";
+      document.getElementById('result-desc').innerHTML = "<b>Ваш подход — Волевой акт и ответственность.</b><br><br>Вам близок концепт духовного подвига и прямого действия. Вы не опускаете руки перед лицом проблем, готовы брать на себя ответственность за результат и верите в созидательную силу преодоления.";
 
       resImg.src = imgTomorrow;
       resImg.style.display = 'block';
