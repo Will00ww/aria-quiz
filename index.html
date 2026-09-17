@@ -3,692 +3,672 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Психологический Рок-Тест</title>
+  <title>Тест: Эволюция Бунта</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Oswald:wght@600;700&display=swap" rel="stylesheet">
+
+  <link rel="preload" as="image" href="himera.webp">
+  <link rel="preload" as="image" href="tomorrow.webp">
+
   <style>
     :root {
-      --bg-color: #0a0a0a;
-      --card-bg: #121212;
-      --accent-color: #ff0000;
-      --accent-glow: rgba(255, 0, 0, 0.5);
-      --text-main: #f0f0f0;
-      --text-muted: #999999;
-      --border-color: #222222;
-      --font-header: 'Impact', 'Arial Black', sans-serif;
-      --font-body: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --bg: #0d0d11;
+      --card-bg: rgba(22, 22, 30, 0.94);
+      --accent: #e63946;
+      --accent-glow: rgba(230, 57, 70, 0.35);
+      --text: #edf2f4;
+      --subtext: #8d99ae;
+      --border-color: rgba(230, 57, 70, 0.3);
+      --vinyl-label: #e63946;
+    }
+
+    body.theme-himera {
+      --bg: #050d0a;
+      --card-bg: rgba(14, 26, 21, 0.94);
+      --accent: #2ec4b6;
+      --accent-glow: rgba(46, 196, 182, 0.4);
+      --text: #e0f2fe;
+      --subtext: #70978f;
+      --border-color: rgba(46, 196, 182, 0.35);
+      --vinyl-label: #2ec4b6;
+    }
+
+    body.theme-tomorrow {
+      --bg: #141008;
+      --card-bg: rgba(33, 27, 16, 0.94);
+      --accent: #ffb703;
+      --accent-glow: rgba(255, 183, 3, 0.4);
+      --text: #fff8e7;
+      --subtext: #caba94;
+      --border-color: rgba(255, 183, 3, 0.35);
+      --vinyl-label: #ffb703;
     }
 
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      user-select: none;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--bg);
     }
 
     body {
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      font-family: var(--font-body);
       min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      overflow-x: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow-x: hidden;
-      position: relative;
-      padding: 20px;
+      font-family: 'Montserrat', sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      transition: background 0.8s ease, color 0.8s ease;
     }
 
-    /* Зернистый фон (Noise Overlay) */
-    .grain-overlay {
+    body::before {
+      content: "";
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
+      inset: 0;
+      z-index: 50;
       pointer-events: none;
-      z-index: 10;
-      opacity: 0.07;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      opacity: 0.06;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.5'/%3E%3C/svg%3E");
     }
 
-    /* Виниловая пластинка (Pure CSS) */
-    .vinyl-container {
+    .bg-decor {
       position: fixed;
-      top: 50%;
-      left: 50%;
-      width: 580px;
-      height: 580px;
-      margin-top: -290px;
-      margin-left: -290px;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .bg-decor::before,
+    .bg-decor::after {
+      content: '';
+      position: absolute;
+      width: 450px;
+      height: 450px;
       border-radius: 50%;
-      pointer-events: none;
-      z-index: 1;
-      opacity: 0.12;
-      animation: vinylRotate 25s linear infinite;
-      background: radial-gradient(circle, 
-        #050505 0%, #151515 10%, 
-        var(--accent-color) 11%, #000 12%, 
-        #1e1e1e 20%, #0a0a0a 30%, 
-        #222222 40%, #0d0d0d 50%, 
-        #1c1c1c 65%, #050505 100%
-      );
-      box-shadow: 0 0 50px rgba(0,0,0,0.9), inset 0 0 25px rgba(0,0,0,0.9);
-      transition: background 0.5s ease;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      filter: blur(70px);
+      opacity: 0.6;
+      animation: smokeMove 12s infinite alternate ease-in-out;
+      transition: background 0.8s ease;
     }
 
-    @keyframes vinylRotate {
-      from { transform: rotate(0deg); }
+    .bg-decor::before { top: 5%; left: 15%; }
+    .bg-decor::after { right: 15%; bottom: 5%; animation-delay: -6s; }
+
+    @keyframes smokeMove {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(80px, -50px) scale(1.3); }
+      100% { transform: translate(-60px, 40px) scale(0.9); }
+    }
+
+    .vinyl {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: repeating-radial-gradient(circle, #111 0 3px, #222 4px, #111 5px);
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
+      opacity: 0.22;
+      animation: spinVinyl 20s linear infinite;
+    }
+
+    .vinyl::after {
+      content: '';
+      width: 30%;
+      height: 30%;
+      border: 4px solid #111;
+      border-radius: 50%;
+      background: var(--vinyl-label);
+      box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.6);
+      transition: background 0.8s ease;
+    }
+
+    .vinyl-1 { top: -60px; left: -80px; width: 320px; height: 320px; }
+    .vinyl-2 { right: -50px; bottom: -40px; width: 220px; height: 220px; animation-direction: reverse; animation-duration: 14s; }
+
+    @keyframes spinVinyl {
       to { transform: rotate(360deg); }
     }
 
-    /* Силуэты гитар Flying V по бокам */
-    .guitar-side {
-      position: fixed;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 140px;
-      height: 420px;
-      opacity: 0.18;
-      pointer-events: none;
-      z-index: 2;
-      color: var(--accent-color);
-      transition: color 0.5s ease;
+    .floating-icon {
+      position: absolute;
+      font-size: 2.2rem;
+      opacity: 0.15;
+      user-select: none;
+      filter: drop-shadow(0 0 8px var(--accent-glow));
+      animation: floatAnim 6s ease-in-out infinite alternate;
     }
 
-    .guitar-left { left: 10px; }
-    .guitar-right { right: 10px; transform: translateY(-50%) scaleX(-1); }
+    .icon-1 { top: 15%; right: 10%; animation-duration: 5s; }
+    .icon-2 { bottom: 20%; left: 8%; animation-duration: 7s; animation-delay: -2s; }
+    .icon-3 { top: 50%; left: 3%; font-size: 1.8rem; animation-duration: 6s; animation-delay: -4s; }
+    .icon-4 { right: 25%; bottom: 8%; font-size: 1.6rem; animation-duration: 8s; animation-delay: -1s; }
 
-    /* Главный контейнер */
-    .quiz-container {
+    @keyframes floatAnim {
+      to { transform: translateY(-25px) rotate(12deg); }
+    }
+
+    .container {
       position: relative;
-      z-index: 20;
+      z-index: 10;
       width: 100%;
-      max-width: 680px;
-      background: var(--card-bg);
-      border: 2px solid var(--accent-color);
-      box-shadow: 0 0 25px var(--accent-glow), inset 0 0 15px rgba(0,0,0,0.8);
-      padding: 35px 30px;
-      border-radius: 4px;
+      max-width: 550px;
       overflow: hidden;
-      transition: border-color 0.5s ease, box-shadow 0.5s ease;
+      padding: 30px;
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      background: var(--card-bg);
+      backdrop-filter: blur(8px);
+      animation: breathe 5s infinite ease-in-out;
+      transition: background 0.8s ease, border-color 0.8s ease;
     }
 
-    /* Титульный экран */
-    .start-screen {
-      text-align: center;
-      animation: fadeIn 0.5s ease forwards;
+    @keyframes breathe {
+      0%, 100% { box-shadow: 0 0 35px var(--accent-glow); }
+      50% { box-shadow: 0 0 65px var(--accent-glow); }
     }
 
-    .main-title {
-      font-family: var(--font-header);
-      font-size: 2.6rem;
-      color: var(--accent-color);
+    h1,
+    .result-title {
+      font-family: 'Oswald', sans-serif;
+      color: var(--accent);
       text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 15px;
-      text-shadow: 0 0 15px var(--accent-glow);
-      transition: color 0.5s ease;
-    }
-
-    .start-desc {
-      font-size: 1.05rem;
-      line-height: 1.6;
-      color: #cccccc;
-      margin-bottom: 30px;
-    }
-
-    .start-btn {
-      background: var(--accent-color);
-      color: #000;
-      font-family: var(--font-header);
-      font-size: 1.3rem;
-      text-transform: uppercase;
-      padding: 15px 40px;
-      border: none;
-      cursor: pointer;
       letter-spacing: 1.5px;
-      transition: all 0.2s ease;
-      box-shadow: 0 0 15px var(--accent-glow);
+      transition: color 0.8s ease;
     }
 
-    .start-btn:hover {
-      transform: scale(1.05);
-      background: #ffffff;
-      box-shadow: 0 0 25px #ffffff;
+    h1 {
+      margin: 0 0 12px;
+      text-align: center;
+      font-size: 1.7rem;
     }
 
-    /* Экран вопросов */
-    .question-screen {
+    .subtitle {
+      margin: 0 0 20px;
+      color: var(--subtext);
+      text-align: center;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .intro-box {
+      margin-bottom: 25px;
+      padding: 18px;
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.3);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      transition: border-color 0.8s ease;
+    }
+
+    .primary-btn,
+    .btn-option {
+      font-family: 'Montserrat', sans-serif;
+      cursor: pointer;
+    }
+
+    .primary-btn {
+      display: block;
+      width: 100%;
+      padding: 15px 24px;
+      border: 0;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #000;
+      font-family: 'Oswald', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+    }
+
+    .primary-btn:hover {
+      filter: brightness(1.2);
+      box-shadow: 0 0 25px var(--accent-glow);
+      transform: scale(1.01);
+    }
+
+    #quiz-screen,
+    #result-screen {
       display: none;
     }
 
-    /* Шкала прогресса */
-    .progress-section {
-      margin-bottom: 25px;
-    }
-
-    .progress-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-family: var(--font-header);
-      font-size: 1.1rem;
-      letter-spacing: 1px;
-      color: var(--accent-color);
-      margin-bottom: 8px;
-      text-transform: uppercase;
-      transition: color 0.5s ease;
-    }
-
-    .progress-bar-bg {
+    .progress-bar-wrap {
       width: 100%;
-      height: 10px;
-      background: #1a1a1a;
-      border: 1px solid var(--border-color);
-      position: relative;
+      height: 7px;
+      margin-bottom: 20px;
       overflow: hidden;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
     }
 
     .progress-bar-fill {
+      width: 0%;
       height: 100%;
-      width: 20%;
-      background: var(--accent-color);
-      box-shadow: 0 0 10px var(--accent-color);
-      transition: width 0.4s ease, background-color 0.5s ease;
+      background: linear-gradient(90deg, #ff4500, var(--accent));
+      box-shadow: 0 0 10px var(--accent-glow);
+      transition: width 0.4s ease, background 0.8s ease;
     }
 
-    /* Заголовок вопроса */
-    .question-title {
-      font-size: 1.25rem;
+    .question {
+      margin-bottom: 25px;
+      font-size: 1.1rem;
       font-weight: 600;
       line-height: 1.4;
-      margin-bottom: 30px;
-      min-height: 60px;
     }
 
-    /* Варианты ответов */
-    .options-container {
+    .options {
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      gap: 14px;
     }
 
-    .option-btn {
-      background: #181818;
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      padding: 16px 20px;
+    .btn-option {
+      width: 100%;
+      padding: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      text-align: left;
       font-size: 0.95rem;
       line-height: 1.4;
+      transition: all 0.3s ease;
+    }
+
+    .btn-option:hover,
+    .btn-option:focus-visible {
+      border-color: var(--accent);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 18px var(--accent-glow);
+      outline: none;
+      transform: translateY(-2px);
+    }
+
+    .btn-option.selected {
+      background: var(--accent);
+      color: #000;
+      font-weight: 700;
+    }
+
+    .result {
+      text-align: center;
+    }
+
+    .result-title {
+      margin-bottom: 15px;
+      font-size: 1.4rem;
+    }
+
+    .result-img {
+      display: block;
+      width: 100%;
+      max-height: 230px;
+      margin: 15px 0 20px;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      object-fit: cover;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 25px var(--accent-glow);
+    }
+
+    .result-desc-box {
+      margin-bottom: 25px;
+      padding: 20px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.25);
       text-align: left;
-      cursor: pointer;
-      border-left: 4px solid var(--border-color);
-      transition: all 0.2s ease;
-      position: relative;
-      overflow: hidden;
+      font-size: 0.95rem;
+      line-height: 1.6;
     }
 
-    .option-btn:hover {
-      background: #222222;
-      border-color: var(--accent-color);
-      border-left-color: var(--accent-color);
-      box-shadow: 0 0 12px var(--accent-glow);
-      transform: translateX(4px);
+    /* Жорик: на компьютере снизу справа, но не у самого края. */
+    #zhorik-mascot {
+      position: fixed;
+      right: clamp(18px, 5vw, 80px);
+      bottom: -300px;
+      z-index: 999;
+      width: clamp(150px, 22vw, 220px);
+      pointer-events: none;
+      filter: drop-shadow(-10px 10px 15px rgba(0, 0, 0, 0.8));
+      transform: scaleX(-1);
+      transition: bottom 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    .option-btn strong {
-      color: var(--accent-color);
-      margin-right: 8px;
-      font-family: var(--font-header);
-      font-size: 1.1rem;
-      transition: color 0.5s ease;
+    #zhorik-mascot.visible {
+      bottom: max(12px, env(safe-area-inset-bottom));
+      transform: scaleX(-1) rotate(5deg);
     }
 
-    /* Глитч-анимация при смене вопросов */
+    .zhorik-image {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .zhorik-bubble {
+      position: absolute;
+      top: -70px;
+      left: 50%;
+      width: min(280px, calc(100vw - 36px));
+      padding: 10px 14px;
+      border-radius: 14px;
+      background: var(--accent);
+      color: #000;
+      font-size: 0.85rem;
+      font-weight: 700;
+      line-height: 1.3;
+      text-align: center;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      transform: translateX(-50%) scaleX(-1);
+      transition: opacity 0.4s ease 0.3s, background 0.8s ease;
+    }
+
+    #zhorik-mascot.visible .zhorik-bubble {
+      opacity: 1;
+    }
+
+    .wave-active::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -150%;
+      z-index: 10;
+      width: 200%;
+      height: 200%;
+      pointer-events: none;
+      background: linear-gradient(60deg, transparent 30%, rgba(255, 255, 255, 0.22) 50%, transparent 70%);
+      transform: rotate(25deg);
+      animation: waveSheen 0.85s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    @keyframes waveSheen {
+      to { left: 150%; }
+    }
+
     .glitch-effect {
       animation: glitchAnim 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
     }
 
     @keyframes glitchAnim {
-      0% { transform: translate(0); opacity: 1; }
+      0%, 100% { transform: translate(0); opacity: 1; }
       20% { transform: translate(-6px, 3px); filter: hue-rotate(90deg) contrast(150%); opacity: 0.8; }
       40% { transform: translate(6px, -3px); filter: invert(30%); }
       60% { transform: translate(-4px, 2px); opacity: 0.9; }
       80% { transform: translate(3px, -1px); filter: hue-rotate(-90deg); }
-      100% { transform: translate(0); opacity: 1; filter: none; }
     }
 
-    /* Итоговый экран */
-    .result-screen {
-      display: none;
-      text-align: center;
-      animation: fadeIn 0.4s ease forwards;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .result-title {
-      font-family: var(--font-header);
-      font-size: 2.2rem;
-      color: var(--accent-color);
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 25px;
-      text-shadow: 0 0 10px var(--accent-glow);
-      transition: color 0.5s ease;
-    }
-
-    /* Блок результата */
-    .result-body {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: 25px;
-      margin-bottom: 30px;
-    }
-
-    .result-img-box {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .result-img {
-      max-width: 100%;
-      height: auto;
-      max-height: 260px;
-      border: 2px solid var(--accent-color);
-      box-shadow: 0 0 15px var(--accent-glow);
-      object-fit: cover;
-      transition: border-color 0.5s ease;
-      border-radius: 4px;
-    }
-
-    .result-text-box {
-      flex: 1.2;
-      text-align: left;
-    }
-
-    .result-desc {
-      font-size: 1rem;
-      line-height: 1.6;
-      color: #dddddd;
-    }
-
-    /* --- АНИМАЦИИ ВЫКАТЫВАНИЯ (ПК: Лево/Право) --- */
-    .animate-result .result-img-box {
-      animation: rollInLeft 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    .animate-result .result-text-box {
-      animation: slideInRight 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    @keyframes rollInLeft {
-      0% {
-        transform: translateX(-150%) rotate(-120deg);
-        opacity: 0;
-      }
-      100% {
-        transform: translateX(0) rotate(0deg);
-        opacity: 1;
-      }
-    }
-
-    @keyframes slideInRight {
-      0% {
-        transform: translateX(150%);
-        opacity: 0;
-      }
-      100% {
-        transform: translateX(0);
-        opacity: 1;
-      }
-    }
-
-    /* Блок с Жориком */
-    .zhorik-block {
-      background: #0d0d0d;
-      border: 1px dashed var(--accent-color);
-      padding: 18px;
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      margin-bottom: 30px;
-      text-align: left;
-      transition: border-color 0.5s ease;
-    }
-
-    .zhorik-img {
-      width: 90px;
-      height: 90px;
-      object-fit: contain;
-      flex-shrink: 0;
-      filter: drop-shadow(0 0 5px var(--accent-glow));
-    }
-
-    .zhorik-text {
-      font-style: italic;
-      font-size: 0.95rem;
-      line-height: 1.4;
-      color: #ffffff;
-    }
-
-    .zhorik-name {
-      display: block;
-      font-family: var(--font-header);
-      color: var(--accent-color);
-      font-style: normal;
-      font-size: 1.1rem;
-      margin-bottom: 4px;
-      transition: color 0.5s ease;
-    }
-
-    /* Кнопка рестарта */
-    .restart-btn {
-      background: var(--accent-color);
-      color: #000;
-      font-family: var(--font-header);
-      font-size: 1.2rem;
-      text-transform: uppercase;
-      padding: 14px 35px;
-      border: none;
-      cursor: pointer;
-      letter-spacing: 1px;
-      transition: all 0.2s ease;
-      box-shadow: 0 0 15px var(--accent-glow);
-    }
-
-    .restart-btn:hover {
-      transform: scale(1.05);
-      background: #ffffff;
-      box-shadow: 0 0 25px #ffffff;
-    }
-
-    /* --- АДАПТИВ ДЛЯ МОБИЛОК (Верх/Низ) --- */
     @media (max-width: 600px) {
-      .quiz-container { padding: 20px 15px; }
-      .guitar-side { display: none; }
-      .main-title { font-size: 2rem; }
-      .result-title { font-size: 1.7rem; }
-
-      .result-body {
-        flex-direction: column;
-        gap: 20px;
+      body {
+        align-items: flex-start;
+        padding: 12px;
       }
 
-      .result-text-box {
-        text-align: center;
+      .container {
+        margin: 10px 0;
+        padding: 22px 16px;
+        border-radius: 14px;
       }
 
-      .animate-result .result-img-box {
-        animation: rollInTop 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      .vinyl-1 { left: -150px; }
+      .vinyl-2 { right: -130px; }
+      .floating-icon { display: none; }
+      h1 { font-size: 1.5rem; }
+      .question { font-size: 1rem; }
+      .btn-option { padding: 14px; }
+
+      /* На телефоне Жорик располагается по центру снизу. */
+      #zhorik-mascot {
+        right: auto;
+        left: 50%;
+        bottom: -240px;
+        width: min(155px, 42vw);
+        transform: translateX(-50%) scaleX(-1);
       }
 
-      .animate-result .result-text-box {
-        animation: slideInBottom 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      #zhorik-mascot.visible {
+        bottom: max(8px, env(safe-area-inset-bottom));
+        transform: translateX(-50%) scaleX(-1) rotate(4deg);
       }
 
-      .zhorik-block { 
-        flex-direction: column; 
-        text-align: center; 
+      .zhorik-bubble {
+        top: -76px;
+        width: min(270px, calc(100vw - 24px));
+        padding: 9px 12px;
+        font-size: 0.78rem;
       }
-      .zhorik-img { width: 80px; height: 80px; }
     }
 
-    @keyframes rollInTop {
-      0% {
-        transform: translateY(-150%) rotate(-120deg);
-        opacity: 0;
-      }
-      100% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 1;
-      }
-    }
-
-    @keyframes slideInBottom {
-      0% {
-        transform: translateY(150%);
-        opacity: 0;
-      }
-      100% {
-        transform: translateY(0);
-        opacity: 1;
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
       }
     }
   </style>
 </head>
 <body>
-
-  <!-- Графические спецэффекты на фоне -->
-  <div class="grain-overlay"></div>
-  <div class="vinyl-container"></div>
-
-  <!-- Четкий силуэт электрогитары Flying V слева -->
-  <svg class="guitar-side guitar-left" viewBox="0 0 100 300" fill="currentColor">
-    <path d="M45,35 L20,5 L40,15 L55,35 Z" />
-    <circle cx="22" cy="12" r="2.5"/>
-    <circle cx="27" cy="17" r="2.5"/>
-    <circle cx="32" cy="22" r="2.5"/>
-    <rect x="46" y="35" width="8" height="110" />
-    <path d="M50,145 L0,290 L32,275 L50,210 L68,275 L100,290 Z" />
-    <rect x="42" y="160" width="16" height="8" rx="1" fill="var(--bg-color)" />
-    <rect x="42" y="175" width="16" height="8" rx="1" fill="var(--bg-color)" />
-    <rect x="44" y="190" width="12" height="4" rx="1" fill="var(--bg-color)" />
-  </svg>
-
-  <!-- Четкий силуэт электрогитары Flying V справа -->
-  <svg class="guitar-side guitar-right" viewBox="0 0 100 300" fill="currentColor">
-    <path d="M45,35 L20,5 L40,15 L55,35 Z" />
-    <circle cx="22" cy="12" r="2.5"/>
-    <circle cx="27" cy="17" r="2.5"/>
-    <circle cx="32" cy="22" r="2.5"/>
-    <rect x="46" y="35" width="8" height="110" />
-    <path d="M50,145 L0,290 L32,275 L50,210 L68,275 L100,290 Z" />
-    <rect x="42" y="160" width="16" height="8" rx="1" fill="var(--bg-color)" />
-    <rect x="42" y="175" width="16" height="8" rx="1" fill="var(--bg-color)" />
-    <rect x="44" y="190" width="12" height="4" rx="1" fill="var(--bg-color)" />
-  </svg>
-
-  <!-- Главная карточка -->
-  <div class="quiz-container" id="quiz-box">
-    
-    <!-- Титульный экран -->
-    <div class="start-screen" id="start-screen">
-      <h1 class="main-title">Эволюция бунта!</h1>
-      <p class="start-desc">Пройдите экспресс-тест, чтобы узнать, к какому бунтарю можно отнести вас, и узнайте, что думает на этот счет Жорик!</p>
-      <button class="start-btn" onclick="startQuiz()">ПОГНАЛИ</button>
-    </div>
-
-    <!-- Интерактивная зона вопросов -->
-    <div class="question-screen" id="question-screen">
-      <div class="progress-section">
-        <div class="progress-header">
-          <span>Рок-Тест</span>
-          <span id="progress-text">Вопрос 1 из 5</span>
-        </div>
-        <div class="progress-bar-bg">
-          <div class="progress-bar-fill" id="progress-fill"></div>
-        </div>
-      </div>
-
-      <div class="question-title" id="question-text">
-        Loading...
-      </div>
-
-      <div class="options-container" id="options-box">
-        <!-- Кнопки создаются динамически через JS -->
-      </div>
-    </div>
-
-    <!-- Финальный экран -->
-    <div class="result-screen" id="result-screen">
-      <h2 class="result-title" id="result-title">Результат</h2>
-
-      <div class="result-body" id="result-body">
-        <div class="result-img-box">
-          <img src="" alt="Результат" class="result-img" id="result-img">
-        </div>
-        <div class="result-text-box">
-          <p class="result-desc" id="result-desc"></p>
-        </div>
-      </div>
-
-      <!-- Обязательный блок с Жориком -->
-      <div class="zhorik-block">
-        <img src="zhorik.png" alt="Жорик" class="zhorik-img">
-        <div class="zhorik-text">
-          <span class="zhorik-name">Жорик вещает:</span>
-          <span id="zhorik-quote">...</span>
-        </div>
-      </div>
-
-      <button class="restart-btn" onclick="restartQuiz()">Пройти заново</button>
-    </div>
-
+  <div class="bg-decor" aria-hidden="true">
+    <div class="vinyl vinyl-1"></div>
+    <div class="vinyl vinyl-2"></div>
+    <div class="floating-icon icon-1">🎸</div>
+    <div class="floating-icon icon-2">⚡</div>
+    <div class="floating-icon icon-3">🎶</div>
+    <div class="floating-icon icon-4">🎸</div>
   </div>
+
+  <div id="zhorik-mascot" aria-live="polite">
+    <div class="zhorik-bubble" id="zhorik-phrase">...</div>
+    <img class="zhorik-image" src="zhorik.png" alt="Жорик">
+  </div>
+
+  <main class="container" id="main-container">
+    <section id="start-screen">
+      <h1>Эволюция Бунта</h1>
+      <p class="subtitle">Интерактивное исследование к проекту по лирике группы «Ария»</p>
+
+      <div class="intro-box">
+        <b>Уважаемые члены комиссии!</b><br><br>
+        Вам предлагается пройти короткий ситуационный экспресс-тест (5 вопросов).<br><br>
+        Он поможет определить, какому этапу смысловой эволюции группы соответствует Ваш стиль принятия решений: фаталистично-эгоистической эпохе альбома <b>«Химера» (2001)</b> или созидательно-волевой эпохе <b>«Когда настанет завтра» (2025)</b>.
+      </div>
+
+      <button class="primary-btn" type="button" id="start-button">Пройти тест</button>
+    </section>
+
+    <section id="quiz-screen" aria-live="polite">
+      <div class="progress-bar-wrap" aria-label="Прогресс теста">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+      </div>
+      <h1>Какой Вы бунтарь?</h1>
+      <div class="question" id="question-text">Загрузка...</div>
+      <div class="options" id="options-container"></div>
+    </section>
+
+    <section id="result-screen" class="result" aria-live="polite">
+      <h1>Ваш результат</h1>
+      <div class="result-title" id="result-title">...</div>
+      <img id="result-image" class="result-img" src="" alt="Результат">
+      <div id="result-desc" class="result-desc-box"></div>
+      <button class="primary-btn" type="button" id="restart-button">Пройти заново</button>
+    </section>
+  </main>
 
   <script>
     const questions = [
       {
-        question: "Вам нужно принять решение в ситуации, где правила игры постоянно меняются сверху:",
+        question: 'Вам нужно принять решение в ситуации, где правила игры постоянно меняются сверху:',
         options: [
-          { text: "A: Перестану суетиться и адаптируюсь под текущий момент. Пусть система сама определится, а я сохраню автономность и нервы.", type: "himera" },
-          { text: "B: Буду гнуть свою линию и задавать структуру сам, даже если придется идти напролом и тратить кучу сил.", type: "tomorrow" }
+          { label: 'A', text: 'Перестану суетиться и адаптируюсь под текущий момент. Пусть система сама определится, а я сохраню автономность и нервы.', type: 'himera' },
+          { label: 'B', text: 'Буду гнуть свою линию и задавать структуру сам, даже если придется идти напролом и тратить кучу сил.', type: 'tomorrow' }
         ]
       },
       {
-        question: "Проект, в который вы вложили много сил, явно зашел в тупик из-за системных ошибок:",
+        question: 'Проект, в который вы вложили много сил, явно зашел в тупик из-за системных ошибок:',
         options: [
-          { text: "A: Фиксирую убытки и фиксирую опыт. Нет смысла вливать ресурсы в то, что отжило свое — лучше переключиться на новое.", type: "himera" },
-          { text: "B: Упрусь до последнего и пересоберу конструкцию. Любой тупик — это просто проверка на прочность и повод перестроить подход.", type: "tomorrow" }
+          { label: 'A', text: 'Фиксирую убытки и опыт. Нет смысла вливать ресурсы в то, что отжило свое — лучше переключиться на новое.', type: 'himera' },
+          { label: 'B', text: 'Упрусь до последнего и пересоберу конструкцию. Любой тупик — это проверка на прочность и повод перестроить подход.', type: 'tomorrow' }
         ]
       },
       {
-        question: "Вы видите, как в коллективе или системе разгорается затяжной конфликт интересов:",
+        question: 'Вы видите, как в коллективе или системе разгорается затяжной конфликт интересов:',
         options: [
-          { text: "A: Отойду на безопасное расстояние и буду наблюдать. В чужой рубке легко сгореть ни за что, а со стороны видно лучше.", type: "himera" },
-          { text: "B: Вмешаюсь и попытаюсь вытащить проблему на свет, чтобы разрубить этот узел, даже если рискую стать виноватым для всех.", type: "tomorrow" }
+          { label: 'A', text: 'Отойду на безопасное расстояние и буду наблюдать. В чужой рубке легко сгореть ни за что, а со стороны видно лучше.', type: 'himera' },
+          { label: 'B', text: 'Вмешаюсь и попытаюсь вытащить проблему на свет, чтобы разрубить этот узел, даже если рискую стать виноватым для всех.', type: 'tomorrow' }
         ]
       },
       {
-        question: "Перед вами встает выбор: синица в руках или журавль в небе в условиях полной неопределенности:",
+        question: 'Перед вами встает выбор: синица в руках или журавль в небе в условиях полной неопределенности:',
         options: [
-          { text: "A: Выберу то, что дает устойчивость прямо сейчас. Иллюзии о великом будущем не стоят реальных потерь в настоящем.", type: "himera" },
-          { text: "B: Рискну ради масштаба и цели. Без высокого замысла и движения вперед любое \"сейчас\" быстро превращается в болото.", type: "tomorrow" }
+          { label: 'A', text: 'Выберу то, что дает устойчивость прямо сейчас. Иллюзии о великом будущем не стоят реальных потерь в настоящем.', type: 'himera' },
+          { label: 'B', text: 'Рискну ради масштаба и цели. Без высокого замысла и движения вперед любое «сейчас» быстро превращается в болото.', type: 'tomorrow' }
         ]
       },
       {
-        question: "Как вы относитесь к ситуациям, когда приходится отвечать за чужие промахи?",
+        question: 'Как вы относитесь к ситуациям, когда приходится отвечать за чужие промахи?',
         options: [
-          { text: "A: Четко обозначаю границы. Ответственность должна быть персональной, иначе система плодит паразитов.", type: "himera" },
-          { text: "B: Просто беру и делаю за двоих. Главное — общий результат и движение вперед, а разбираться, кто виноват, будем потом.", type: "tomorrow" }
+          { label: 'A', text: 'Четко обозначаю границы. Ответственность должна быть персональной, иначе система плодит паразитов.', type: 'himera' },
+          { label: 'B', text: 'Просто беру и делаю за двоих. Главное — общий результат и движение вперед, а разбираться, кто виноват, будем потом.', type: 'tomorrow' }
         ]
       }
     ];
 
     let currentQuestion = 0;
     let scores = { himera: 0, tomorrow: 0 };
+    let answerLocked = false;
 
-    const quizBox = document.getElementById('quiz-box');
+    const body = document.body;
+    const mainContainer = document.getElementById('main-container');
     const startScreen = document.getElementById('start-screen');
-    const questionScreen = document.getElementById('question-screen');
-    const questionText = document.getElementById('question-text');
-    const optionsBox = document.getElementById('options-box');
-    const progressText = document.getElementById('progress-text');
-    const progressFill = document.getElementById('progress-fill');
-
+    const quizScreen = document.getElementById('quiz-screen');
     const resultScreen = document.getElementById('result-screen');
-    const resultBody = document.getElementById('result-body');
+    const questionText = document.getElementById('question-text');
+    const optionsContainer = document.getElementById('options-container');
+    const progressFill = document.getElementById('progress-fill');
     const resultTitle = document.getElementById('result-title');
-    const resultImg = document.getElementById('result-img');
+    const resultImage = document.getElementById('result-image');
     const resultDesc = document.getElementById('result-desc');
-    const zhorikQuote = document.getElementById('zhorik-quote');
+    const zhorik = document.getElementById('zhorik-mascot');
+    const zhorikPhrase = document.getElementById('zhorik-phrase');
+
+    document.getElementById('start-button').addEventListener('click', startQuiz);
+    document.getElementById('restart-button').addEventListener('click', restartQuiz);
 
     function startQuiz() {
       startScreen.style.display = 'none';
-      questionScreen.style.display = 'block';
-      loadQuestion();
+      resultScreen.style.display = 'none';
+      quizScreen.style.display = 'block';
+      showQuestion();
     }
 
-    function loadQuestion() {
-      const q = questions[currentQuestion];
-      progressText.innerText = `Вопрос ${currentQuestion + 1} из ${questions.length}`;
-      progressFill.style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
-      
-      questionText.innerText = q.question;
-      optionsBox.innerHTML = '';
+    function showQuestion() {
+      const question = questions[currentQuestion];
+      answerLocked = false;
 
-      q.options.forEach(opt => {
-        const btn = document.createElement('button');
-        btn.className = 'option-btn';
-        btn.innerHTML = opt.text.replace(/^(A:|B:)/, '<strong>$1</strong>');
-        btn.onclick = () => selectOption(opt.type);
-        optionsBox.appendChild(btn);
+      questionText.textContent = `${currentQuestion + 1}/${questions.length}. ${question.question}`;
+      progressFill.style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
+      optionsContainer.innerHTML = '';
+
+      mainContainer.classList.remove('glitch-effect');
+      void mainContainer.offsetWidth;
+      mainContainer.classList.add('glitch-effect');
+
+      question.options.forEach((option) => {
+        const button = document.createElement('button');
+        const label = document.createElement('strong');
+
+        button.type = 'button';
+        button.className = 'btn-option';
+        label.textContent = `${option.label}: `;
+        button.append(label, option.text);
+
+        button.addEventListener('click', () => selectOption(option.type, button));
+        optionsContainer.appendChild(button);
       });
     }
 
-    function selectOption(type) {
-      scores[type]++;
-      
-      // Глитч-эффект при смене вопросов
-      quizBox.classList.add('glitch-effect');
+    function selectOption(type, selectedButton) {
+      if (answerLocked) return;
+      answerLocked = true;
+
+      selectedButton.classList.add('selected');
+      scores[type] += 1;
+
       setTimeout(() => {
-        quizBox.classList.remove('glitch-effect');
-      }, 350);
+        currentQuestion += 1;
 
-      currentQuestion++;
-
-      if (currentQuestion < questions.length) {
-        setTimeout(loadQuestion, 150);
-      } else {
-        setTimeout(showResult, 200);
-      }
+        if (currentQuestion < questions.length) {
+          showQuestion();
+        } else {
+          showResult();
+        }
+      }, 300);
     }
 
     function showResult() {
-      questionScreen.style.display = 'none';
+      quizScreen.style.display = 'none';
       resultScreen.style.display = 'block';
+      mainContainer.classList.remove('glitch-effect');
+      zhorik.classList.remove('visible');
 
-      if (scores.himera >= scores.tomorrow) {
-        // Итог "Химера"
-        document.documentElement.style.setProperty('--accent-color', '#00f5d4');
-        document.documentElement.style.setProperty('--accent-glow', 'rgba(0, 245, 212, 0.4)');
-        
-        resultTitle.innerText = 'Химера';
-        resultImg.src = 'himera.webp';
-        resultDesc.innerText = 'Ты умеешь сохранять автономность и трезвый расчёт в любом хаосе. Зачем ломать лоб о закрытые двери, когда можно адаптироваться, выждать момент и победить без лишних потерь? Твой холодный разум — твой главный щит.';
-        zhorikQuote.innerText = '«Ну что, хитрый лис, решил переждать бурю в тени? Умно. Главное — не засни там, а то струны заржавеют!»';
+      mainContainer.classList.remove('wave-active');
+      void mainContainer.offsetWidth;
+      mainContainer.classList.add('wave-active');
+
+      const isHimera = scores.himera >= scores.tomorrow;
+
+      if (isHimera) {
+        body.className = 'theme-himera';
+        resultTitle.textContent = 'Ваш психотип — Эпоха «Химеры» (2001)';
+        resultImage.src = 'himera.webp';
+        resultImage.alt = 'Образ эпохи «Химеры»';
+        resultDesc.innerHTML = '<b>Ваш подход — фатализм и индивидуализм.</b><br><br>В сложных ситуациях Вы склонны к обособленности и защите собственных границ. Вы реалистично оцениваете бессмысленность борьбы с внешними факторами и предпочитаете сохранять личную автономию, а не тратить силы на безнадежное сопротивление.';
+        zhorikPhrase.textContent = 'Чистый одиночка... Если на корабле штиль, съедят не тебя.';
       } else {
-        // Итог "Когда настанет завтра"
-        document.documentElement.style.setProperty('--accent-color', '#ffd700');
-        document.documentElement.style.setProperty('--accent-glow', 'rgba(255, 215, 0, 0.4)');
-        
-        resultTitle.innerText = 'Когда настанет завтра';
-        resultImg.src = 'tomorrow.webp';
-        resultDesc.innerText = 'Твой путь — идти напролом, ломать стены и брать ответственность на себя. Ты не ждёшь милости от обстоятельств, а сам выжигаешь дорогу к цели. Горячее сердце и несгибаемая воля — твой главный мотор.';
-        zhorikQuote.innerText = '«Опять лезешь на амбразуру с гитарой наперевес? Уважаю огненный напор, но смотри не сгори до зари!»';
+        body.className = 'theme-tomorrow';
+        resultTitle.textContent = 'Ваш психотип — Эпоха «Когда настанет завтра» (2025)';
+        resultImage.src = 'tomorrow.webp';
+        resultImage.alt = 'Образ эпохи «Когда настанет завтра»';
+        resultDesc.innerHTML = '<b>Ваш подход — волевой акт и ответственность.</b><br><br>Вам близок концепт духовного подвига и прямого действия — принцип «Гордиева узла». Вы не опускаете руки перед лицом проблем, готовы брать на себя ответственность за результат и верите в созидательную силу преодоления.';
+        zhorikPhrase.textContent = 'Ого, стальной характер! Готов рвать шаблоны! 🔥';
       }
 
-      // Запускаем анимацию выкатывания
-      resultBody.classList.remove('animate-result');
-      void resultBody.offsetWidth;
-      resultBody.classList.add('animate-result');
+      setTimeout(() => zhorik.classList.add('visible'), 400);
     }
 
     function restartQuiz() {
-      scores = { himera: 0, tomorrow: 0 };
       currentQuestion = 0;
+      scores = { himera: 0, tomorrow: 0 };
+      answerLocked = false;
 
-      resultBody.classList.remove('animate-result');
-      document.documentElement.style.setProperty('--accent-color', '#ff0000');
-      document.documentElement.style.setProperty('--accent-glow', 'rgba(255, 0, 0, 0.5)');
+      body.className = '';
+      zhorik.classList.remove('visible');
+      mainContainer.classList.remove('wave-active', 'glitch-effect');
+      resultImage.src = '';
+      resultDesc.innerHTML = '';
+      progressFill.style.width = '0%';
 
       resultScreen.style.display = 'none';
+      quizScreen.style.display = 'none';
       startScreen.style.display = 'block';
     }
   </script>
